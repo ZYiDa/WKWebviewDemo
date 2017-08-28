@@ -3,7 +3,7 @@
 //  WKWebviewDemo
 //
 //  Created by YYKit on 2017/7/20.
-//  Copyright © 2017年 kzkj. All rights reserved.
+//  Copyright © 2017年 zl. All rights reserved.
 //
 
 #import "ViewController.h"
@@ -19,11 +19,6 @@
     [super viewDidLoad];
     self.urlTextField.delegate = self;
 
-    //TODO:禁用屏幕边缘滑动返回手势
-    if([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)])
-    {
-        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    }
 
     //TODO:设置返回按键样式
     UIBarButtonItem *back = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];

@@ -3,7 +3,7 @@
 //  KaizeOCR
 //
 //  Created by YYKit on 2017/6/16.
-//  Copyright © 2017年 kzkj. All rights reserved.
+//  Copyright © 2017年 zl. All rights reserved.
 //  首页的WKWebview，用于显示公司主页
 
 #import "WKWebviewController.h"
@@ -15,6 +15,11 @@
 
 @property (nonatomic,strong) WKWebView *wkWebview;
 @property (nonatomic,strong) UIProgressView *progress;
+@property (nonatomic,strong) UIBarButtonItem *leftBarButton;
+@property (nonatomic,strong) UIBarButtonItem *leftBarButtonSecond;
+@property (nonatomic,strong)  UIBarButtonItem *negativeSpacer;
+@property (nonatomic,strong)  UIBarButtonItem *negativeSpacer2;
+
 @end
 
 @implementation WKWebviewController
@@ -34,7 +39,6 @@
         _wkWebview.autoresizesSubviews = YES;
         _wkWebview.scrollView.alwaysBounceVertical = YES;
         _wkWebview.allowsBackForwardNavigationGestures = YES;/**这一步是，开启侧滑返回上一历史界面**/
-        NSLog(@"%@",_wkWebview.goBack);
         [self.view addSubview:_wkWebview];
     }
     return _wkWebview;
@@ -58,16 +62,74 @@
 {
     [super viewWillAppear:animated];
 
-    //TODO:加载
-    [self.wkWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]]];
-
-    //TODO:kvo监听，获得页面title和加载进度值
-    [self.wkWebview addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
-    [self.wkWebview addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:NULL];
-//    [self.wkWebview addObserver:self forKeyPath:@"backForwardList" options:NSKeyValueObservingOptionNew context:NULL];
-
+    [self LoadRequest];
+    [self addObserver];
+    [self setBarButtonItem];
 
 }
+
+#pragma mark 加载网页
+- (void)LoadRequest
+{
+    //TODO:加载
+    [self.wkWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]]];
+}
+
+
+#pragma mark 添加KVO观察者
+- (void)addObserver
+{
+    //TODO:kvo监听，获得页面title和加载进度值，以及是否可以返回
+    [self.wkWebview addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
+    [self.wkWebview addObserver:self forKeyPath:@"canGoBack" options:NSKeyValueObservingOptionNew context:NULL];
+    [self.wkWebview addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+#pragma mark 设置BarButtonItem
+- (void)setBarButtonItem
+{
+
+    //设置距离左边屏幕的宽度距离
+    self.leftBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back_item"] style:UIBarButtonItemStylePlain target:self action:@selector(selectedToBack)];
+    self.negativeSpacer = [[UIBarButtonItem alloc]   initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace   target:nil action:nil];
+    self.negativeSpacer.width = -5;
+
+    //设置关闭按钮，以及关闭按钮和返回按钮之间的距离
+    self.leftBarButtonSecond = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"close_item"] style:UIBarButtonItemStylePlain target:self action:@selector(selectedToClose)];
+    self.leftBarButtonSecond.imageInsets = UIEdgeInsetsMake(0, -20, 0, 20);
+    self.navigationItem.leftBarButtonItems = @[self.negativeSpacer,self.leftBarButton];
+
+
+    //设置刷新按妞
+    UIBarButtonItem *reloadItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"reload_item"] style:UIBarButtonItemStylePlain target:self action:@selector(selectedToReloadData)];
+    self.navigationItem.rightBarButtonItem = reloadItem;
+
+}
+#pragma mark 关闭并上一界面
+- (void)selectedToClose
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark 返回上一个网页还是上一个Controller
+- (void)selectedToBack
+{
+    if (self.wkWebview.canGoBack == 1)
+    {
+        [self.wkWebview goBack];
+    }
+    else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+#pragma mark reload
+- (void)selectedToReloadData
+{
+    [self.wkWebview reload];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor lightGrayColor];
@@ -117,11 +179,48 @@
             [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
         }
     }
+    //是否可以返回
+    else if ([keyPath isEqualToString:@"canGoBack"])
+    {
+        if (object == self.wkWebview)
+        {
+            if (self.wkWebview.canGoBack == 1)
+            {
+                self.navigationItem.leftBarButtonItems = @[self.negativeSpacer,self.leftBarButton,self.leftBarButtonSecond];
+            }
+            else
+            {
+                self.navigationItem.leftBarButtonItems = @[self.negativeSpacer,self.leftBarButton];
+            }
+        }
+        else
+        {
+            [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+        }
+    }
     else
     {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
+
+#pragma mark 在这里处理短暂性的加载错误
+/*
+ *-1009 没有网络连接
+ *-1003
+ *-999
+ *101
+ */
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error
+{
+    NSLog(@"ErrorCode:%ld",error.code);
+    if (error.code == -1099)
+    {
+    }
+}
+
+
+#pragma mark 添加返回键和关闭按钮
 
 - (void)viewDidDisappear:(BOOL)animated
 {
@@ -131,6 +230,7 @@
 - (void)dealloc
 {
     [self.wkWebview removeObserver:self forKeyPath:@"estimatedProgress"];
+    [self.wkWebview removeObserver:self forKeyPath:@"canGoBack"];
     [self.wkWebview removeObserver:self forKeyPath:@"title"];
 }
 @end

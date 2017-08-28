@@ -13,7 +13,6 @@
 		06C4BF3A1F20AB2B00748E8F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06C4BF381F20AB2B00748E8F /* Main.storyboard */; };
 		06C4BF3C1F20AB2B00748E8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 06C4BF3B1F20AB2B00748E8F /* Assets.xcassets */; };
 		06C4BF3F1F20AB2B00748E8F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06C4BF3D1F20AB2B00748E8F /* LaunchScreen.storyboard */; };
-		06C4BF471F20ACF300748E8F /* GO.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C4BF461F20ACF300748E8F /* GO.png */; };
 		06C4BF4A1F20AFC700748E8F /* WKWebviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06C4BF491F20AFC700748E8F /* WKWebviewController.m */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +27,6 @@
 		06C4BF3B1F20AB2B00748E8F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		06C4BF3E1F20AB2B00748E8F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		06C4BF401F20AB2B00748E8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		06C4BF461F20ACF300748E8F /* GO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GO.png; sourceTree = "<group>"; };
 		06C4BF481F20AFC700748E8F /* WKWebviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebviewController.h; sourceTree = "<group>"; };
 		06C4BF491F20AFC700748E8F /* WKWebviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebviewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,7 +68,6 @@
 				06C4BF481F20AFC700748E8F /* WKWebviewController.h */,
 				06C4BF491F20AFC700748E8F /* WKWebviewController.m */,
 				06C4BF381F20AB2B00748E8F /* Main.storyboard */,
-				06C4BF461F20ACF300748E8F /* GO.png */,
 				06C4BF3B1F20AB2B00748E8F /* Assets.xcassets */,
 				06C4BF3D1F20AB2B00748E8F /* LaunchScreen.storyboard */,
 				06C4BF401F20AB2B00748E8F /* Info.plist */,
@@ -149,7 +146,6 @@
 				06C4BF3F1F20AB2B00748E8F /* LaunchScreen.storyboard in Resources */,
 				06C4BF3C1F20AB2B00748E8F /* Assets.xcassets in Resources */,
 				06C4BF3A1F20AB2B00748E8F /* Main.storyboard in Resources */,
-				06C4BF471F20ACF300748E8F /* GO.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
