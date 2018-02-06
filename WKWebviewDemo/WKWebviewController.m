@@ -11,6 +11,8 @@
 
 #define WIDTH [UIScreen mainScreen].bounds.size.width
 #define HEIGHT [UIScreen mainScreen].bounds.size.height
+#define Top_Offset HEIGHT==812?88:64
+
 @interface WKWebviewController ()<WKUIDelegate,WKNavigationDelegate>
 
 @property (nonatomic,strong) WKWebView *wkWebview;
@@ -30,7 +32,7 @@
     if (_wkWebview == nil)
     {
 
-        _wkWebview = [[WKWebView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, HEIGHT)];
+        _wkWebview = [[WKWebView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, HEIGHT==812?(HEIGHT - 34):HEIGHT)];
         _wkWebview.UIDelegate = self;
         _wkWebview.navigationDelegate = self;
         _wkWebview.backgroundColor = [UIColor clearColor];
@@ -49,9 +51,9 @@
 {
     if (_progress == nil)
     {
-        _progress = [[UIProgressView alloc]initWithFrame:CGRectMake(0, 64, WIDTH, 4)];
+        _progress = [[UIProgressView alloc]initWithFrame:CGRectMake(0, Top_Offset, WIDTH, 0)];
         _progress.tintColor = [UIColor redColor];
-        _progress.backgroundColor = [UIColor grayColor];
+        _progress.backgroundColor = [UIColor redColor];
         [self.view addSubview:_progress];
     }
     return _progress;
@@ -88,21 +90,34 @@
 #pragma mark 设置BarButtonItem
 - (void)setBarButtonItem
 {
-
     //设置距离左边屏幕的宽度距离
-    self.leftBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back_item"] style:UIBarButtonItemStylePlain target:self action:@selector(selectedToBack)];
-    self.negativeSpacer = [[UIBarButtonItem alloc]   initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace   target:nil action:nil];
-    self.negativeSpacer.width = -5;
+    UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
+    [back setBackgroundImage:[UIImage imageNamed:@"back_item"] forState:UIControlStateNormal];
+    [back addTarget:self action:@selector(selectedToBack) forControlEvents:UIControlEventTouchUpInside];
+    [back setFrame:CGRectMake(0, 0, 28, 28)];
+
+    self.leftBarButton = [[UIBarButtonItem alloc]initWithCustomView:back];
 
     //设置关闭按钮，以及关闭按钮和返回按钮之间的距离
-    self.leftBarButtonSecond = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"close_item"] style:UIBarButtonItemStylePlain target:self action:@selector(selectedToClose)];
-    self.leftBarButtonSecond.imageInsets = UIEdgeInsetsMake(0, -20, 0, 20);
-    self.navigationItem.leftBarButtonItems = @[self.negativeSpacer,self.leftBarButton];
+    UIButton *close = [UIButton buttonWithType:UIButtonTypeCustom];
+    [close setBackgroundImage:[UIImage imageNamed:@"close_item"] forState:UIControlStateNormal];
+    [close setFrame:CGRectMake(0, 0, 25, 25)];
+    [close addTarget:self action:@selector(selectedToClose) forControlEvents:UIControlEventTouchUpInside];
+    self.leftBarButtonSecond = [[UIBarButtonItem alloc]initWithCustomView:close];
+    self.navigationItem.leftBarButtonItems = @[self.leftBarButton];
 
+    if (@available(iOS 11,*)) {
+        NSLog(@"11");
+    }else{
+        NSLog(@"----10011");
+    }
 
     //设置刷新按妞
-    UIBarButtonItem *reloadItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"reload_item"] style:UIBarButtonItemStylePlain target:self action:@selector(selectedToReloadData)];
-    self.navigationItem.rightBarButtonItem = reloadItem;
+    UIBarButtonItem *reloadItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"reload_item"]
+                                                                  style:UIBarButtonItemStylePlain
+                                                                 target:self
+                                                                 action:@selector(selectedToReloadData)];
+    self.navigationItem.rightBarButtonItems = @[reloadItem];
 
 }
 #pragma mark 关闭并上一界面
@@ -114,12 +129,9 @@
 #pragma mark 返回上一个网页还是上一个Controller
 - (void)selectedToBack
 {
-    if (self.wkWebview.canGoBack == 1)
-    {
+    if (self.wkWebview.canGoBack == 1){
         [self.wkWebview goBack];
-    }
-    else
-    {
+    }else{
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -132,7 +144,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -170,36 +182,25 @@
     //网页title
     else if ([keyPath isEqualToString:@"title"])
     {
-        if (object == self.wkWebview)
-        {
-            self.navigationItem.title = self.wkWebview.title;
-        }
-        else
-        {
+        if (object == self.wkWebview){
+            self.title = self.wkWebview.title;
+        }else{
             [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
         }
     }
     //是否可以返回
     else if ([keyPath isEqualToString:@"canGoBack"])
     {
-        if (object == self.wkWebview)
-        {
-            if (self.wkWebview.canGoBack == 1)
-            {
-                self.navigationItem.leftBarButtonItems = @[self.negativeSpacer,self.leftBarButton,self.leftBarButtonSecond];
+        if (object == self.wkWebview){
+            if (self.wkWebview.canGoBack == 1){
+                self.navigationItem.leftBarButtonItems = @[self.leftBarButton,self.leftBarButtonSecond];
+            }else{
+                self.navigationItem.leftBarButtonItems = @[self.leftBarButton];
             }
-            else
-            {
-                self.navigationItem.leftBarButtonItems = @[self.negativeSpacer,self.leftBarButton];
-            }
-        }
-        else
-        {
+        }else{
             [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
         }
-    }
-    else
-    {
+    }else{
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }

@@ -14,6 +14,8 @@
 		06C4BF3C1F20AB2B00748E8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 06C4BF3B1F20AB2B00748E8F /* Assets.xcassets */; };
 		06C4BF3F1F20AB2B00748E8F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06C4BF3D1F20AB2B00748E8F /* LaunchScreen.storyboard */; };
 		06C4BF4A1F20AFC700748E8F /* WKWebviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06C4BF491F20AFC700748E8F /* WKWebviewController.m */; };
+		06EB571B20295DEB00B85AF6 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06EB571A20295DEB00B85AF6 /* MobileCoreServices.framework */; };
+		06EB571D20295DF300B85AF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06EB571C20295DF300B85AF6 /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		06C4BF401F20AB2B00748E8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		06C4BF481F20AFC700748E8F /* WKWebviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebviewController.h; sourceTree = "<group>"; };
 		06C4BF491F20AFC700748E8F /* WKWebviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebviewController.m; sourceTree = "<group>"; };
+		06EB571A20295DEB00B85AF6 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		06EB571C20295DF300B85AF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +40,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06EB571D20295DF300B85AF6 /* Security.framework in Frameworks */,
+				06EB571B20295DEB00B85AF6 /* MobileCoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,6 +53,7 @@
 			children = (
 				06C4BF2E1F20AB2A00748E8F /* WKWebviewDemo */,
 				06C4BF2D1F20AB2A00748E8F /* Products */,
+				06EB571920295DEA00B85AF6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -82,6 +89,15 @@
 				06C4BF301F20AB2A00748E8F /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		06EB571920295DEA00B85AF6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				06EB571C20295DF300B85AF6 /* Security.framework */,
+				06EB571A20295DEB00B85AF6 /* MobileCoreServices.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,6 +303,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kzkj.WKWebviewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -300,6 +317,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kzkj.WKWebviewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
