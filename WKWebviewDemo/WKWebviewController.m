@@ -90,26 +90,26 @@
 #pragma mark 设置BarButtonItem
 - (void)setBarButtonItem
 {
-    //设置距离左边屏幕的宽度距离
-    UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
-    [back setBackgroundImage:[UIImage imageNamed:@"back_item"] forState:UIControlStateNormal];
-    [back addTarget:self action:@selector(selectedToBack) forControlEvents:UIControlEventTouchUpInside];
-    [back setFrame:CGRectMake(0, 0, 28, 28)];
+    //通过imageInset调整item的位置和item之间的位置
+    //设置返回按钮
+    self.leftBarButton = [[UIBarButtonItem alloc]initWithCustomView:[self addItemWithImage:@"back_item"
+                                                                               imageInset:UIEdgeInsetsMake(0, -10, 0, 10)
+                                                                                      size:CGSizeMake(28, 28)
+                                                                                    action:@selector(selectedToBack)]];
 
-    self.leftBarButton = [[UIBarButtonItem alloc]initWithCustomView:back];
+    //设置关闭按钮
+    self.leftBarButtonSecond = [[UIBarButtonItem alloc]initWithCustomView:[self addItemWithImage:@"close_item"
+                                                                                     imageInset:UIEdgeInsetsMake(0, -15, 0, 15)
+                                                                                            size:CGSizeMake(28, 28)
+                                                                                          action:@selector(selectedToClose)]];
 
-    //设置关闭按钮，以及关闭按钮和返回按钮之间的距离
-    UIButton *close = [UIButton buttonWithType:UIButtonTypeCustom];
-    [close setBackgroundImage:[UIImage imageNamed:@"close_item"] forState:UIControlStateNormal];
-    [close setFrame:CGRectMake(0, 0, 25, 25)];
-    [close addTarget:self action:@selector(selectedToClose) forControlEvents:UIControlEventTouchUpInside];
-    self.leftBarButtonSecond = [[UIBarButtonItem alloc]initWithCustomView:close];
     self.navigationItem.leftBarButtonItems = @[self.leftBarButton];
 
+
     if (@available(iOS 11,*)) {
-        NSLog(@"11");
+        NSLog(@"** iOS 11 **");
     }else{
-        NSLog(@"----10011");
+        NSLog(@"** Not iOS 11 **");
     }
 
     //设置刷新按妞
@@ -119,6 +119,23 @@
                                                                  action:@selector(selectedToReloadData)];
     self.navigationItem.rightBarButtonItems = @[reloadItem];
 
+}
+
+#pragma mark 添加item
+- (UIButton *)addItemWithImage:(NSString *)imageName imageInset:(UIEdgeInsets)inset size:(CGSize)itemSize action:(SEL)action {
+
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *image = [UIImage imageNamed:imageName];
+    button.frame = CGRectMake(0, 0, itemSize.width, itemSize.height);
+    [button setImageEdgeInsets:inset];
+    [button setImage:image forState:UIControlStateNormal];
+    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    button.titleLabel.font = [UIFont systemFontOfSize:16];
+
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationItem.leftBarButtonItem = rightItem;
+
+    return button;
 }
 #pragma mark 关闭并上一界面
 - (void)selectedToClose
